@@ -50,12 +50,12 @@ label{
     width:100%;
 }
 
-.field-container input[type="text"]{
+.field-container input{
     width:100%;
     min-width:0;
 }
 
-input[type="text"]{
+input{
     flex:1;
     height:46px;
     border:2px solid #bfc6cd;
@@ -65,9 +65,11 @@ input[type="text"]{
     font-size:16px;
     text-align:center;
     transition:0.2s;
+    -webkit-appearance:none;
+    appearance:none;
 }
 
-input[type="text"]:focus{
+input:focus{
     outline:none;
     border-color:#57c785;
 }
@@ -90,6 +92,7 @@ input[type="text"]:focus{
     cursor:pointer;
     user-select:none;
     flex-shrink:0;
+    touch-action:manipulation;
 }
 
 .clear-btn:hover{
@@ -153,8 +156,20 @@ button:hover{
 <label>Ürünün Önceki Fiyatı</label>
 
 <div class="field-container">
-<input type="text" id="eskiFiyat">
-<div class="clear-btn" onclick="temizleKutu('eskiFiyat')">×</div>
+<input 
+type="text"
+id="eskiFiyat"
+inputmode="decimal"
+autocomplete="off"
+autocorrect="off"
+autocapitalize="off"
+spellcheck="false"
+>
+<div 
+class="clear-btn"
+ontouchstart="temizleKutu(event,'eskiFiyat')"
+onclick="temizleKutu(event,'eskiFiyat')"
+>×</div>
 </div>
 
 </div>
@@ -164,8 +179,21 @@ button:hover{
 <label>Ürünün Yeni Fiyatı</label>
 
 <div class="field-container">
-<input type="text" id="yeniFiyat" class="yellow-bg">
-<div class="clear-btn" onclick="temizleKutu('yeniFiyat')">×</div>
+<input 
+type="text"
+id="yeniFiyat"
+class="yellow-bg"
+inputmode="decimal"
+autocomplete="off"
+autocorrect="off"
+autocapitalize="off"
+spellcheck="false"
+>
+<div 
+class="clear-btn"
+ontouchstart="temizleKutu(event,'yeniFiyat')"
+onclick="temizleKutu(event,'yeniFiyat')"
+>×</div>
 </div>
 
 </div>
@@ -206,9 +234,27 @@ Yapılan İndirim Oranı
 
 <script>
 
-function temizleKutu(id){
+document.querySelectorAll("input").forEach(function(input){
 
-    document.getElementById(id).value = "";
+    input.addEventListener("focus", function(){
+        aktifInput = this;
+    });
+
+});
+
+function temizleKutu(event,id){
+
+    event.preventDefault();
+
+    let input = document.getElementById(id);
+
+    input.value = "";
+
+    setTimeout(function(){
+
+        input.focus();
+
+    },10);
 
 }
 
