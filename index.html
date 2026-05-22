@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sıralı Satış Fiyatı Hesaplama</title>
+<title>İndirim Oranı Hesaplama</title>
 
 <style>
 
@@ -96,27 +96,6 @@ input[type="text"]:focus{
     background:#2587ca;
 }
 
-.row{
-    display:flex;
-    gap:10px;
-    width:100%;
-}
-
-.row .input-group{
-    flex:1;
-    min-width:0;
-}
-
-select{
-    width:100%;
-    height:46px;
-    border:2px solid #bfc6cd;
-    border-radius:8px;
-    font-size:16px;
-    text-align:center;
-    background:white;
-}
-
 button{
     width:100%;
     height:50px;
@@ -140,13 +119,13 @@ button:hover{
     margin-top:20px;
     background:#ecfdf5;
     border-radius:10px;
-    padding:15px;
+    padding:18px;
 }
 
 .result p{
     margin:10px 0;
     color:#2c3e50;
-    font-size:14px;
+    font-size:15px;
 }
 
 .highlight{
@@ -154,28 +133,12 @@ button:hover{
     font-weight:bold;
 }
 
-.total-box{
-    background:#ebf5fb;
-    padding:10px;
-    border-radius:8px;
-    margin-top:12px;
-    border-left:5px solid #3498db;
-}
-
 .final-box{
     background:#d4efdf;
-    padding:10px;
+    padding:14px;
     border-radius:8px;
     margin-top:12px;
     border-left:5px solid #2ecc71;
-}
-
-@media(max-width:480px){
-
-    .row{
-        flex-direction:row;
-    }
-
 }
 
 </style>
@@ -187,161 +150,52 @@ button:hover{
 
 <div class="input-group">
 
-<label>Toplam Brüt Giriş Tutarı (KDV Hariç)</label>
+<label>Ürünün Önceki Fiyatı</label>
 
 <div class="field-container">
-<input type="text" id="brut">
-<div class="clear-btn" onclick="temizleKutu('brut')">×</div>
+<input type="text" id="eskiFiyat">
+<div class="clear-btn" onclick="temizleKutu('eskiFiyat')">×</div>
 </div>
 
 </div>
 
 <div class="input-group">
 
-<label>Ürün Miktarı (Adet / Adet Sayısı)</label>
+<label>Ürünün Yeni Fiyatı</label>
 
 <div class="field-container">
-<input type="text" id="miktar">
-<div class="clear-btn" onclick="temizleKutu('miktar')">×</div>
+<input type="text" id="yeniFiyat" class="yellow-bg">
+<div class="clear-btn" onclick="temizleKutu('yeniFiyat')">×</div>
 </div>
 
 </div>
 
-<div class="input-group">
-
-<label>2. Ürün Miktarı (Adet / Adet Sayısı)</label>
-
-<div class="field-container">
-<input type="text" id="miktar2" class="yellow-bg">
-<div class="clear-btn" onclick="temizleKutu('miktar2')">×</div>
-</div>
-
-</div>
-
-<div class="row">
-
-<div class="input-group">
-
-<label>İskonto 1 (%)</label>
-
-<div class="field-container">
-<input type="text" id="isk1">
-<div class="clear-btn" onclick="temizleKutu('isk1')">×</div>
-</div>
-
-</div>
-
-<div class="input-group">
-
-<label>İskonto 2 (%)</label>
-
-<div class="field-container">
-<input type="text" id="isk2">
-<div class="clear-btn" onclick="temizleKutu('isk2')">×</div>
-</div>
-
-</div>
-
-</div>
-
-<div class="row">
-
-<div class="input-group">
-
-<label>İskonto 3 (%)</label>
-
-<div class="field-container">
-<input type="text" id="isk3">
-<div class="clear-btn" onclick="temizleKutu('isk3')">×</div>
-</div>
-
-</div>
-
-<div class="input-group">
-
-<label>İskonto 4 (%)</label>
-
-<div class="field-container">
-<input type="text" id="isk4">
-<div class="clear-btn" onclick="temizleKutu('isk4')">×</div>
-</div>
-
-</div>
-
-</div>
-
-<div class="row">
-
-<div class="input-group">
-
-<label>Kâr Marjı Oranı (%)</label>
-
-<select id="kar">
-<option value="10">10</option>
-<option value="15">15</option>
-<option value="20">20</option>
-<option value="25" selected>25</option>
-<option value="30">30</option>
-<option value="35">35</option>
-<option value="50">50</option>
-</select>
-
-</div>
-
-<div class="input-group">
-
-<label>KDV Oranı (%)</label>
-
-<select id="kdv">
-<option value="1">%1</option>
-<option value="10">%10</option>
-<option value="20" selected>%20</option>
-</select>
-
-</div>
-
-</div>
-
-<button onclick="hesaplaSatis()">
-Satış Fiyatını Hesapla
+<button onclick="indirimHesapla()">
+İndirim Oranını Hesapla
 </button>
 
 <div class="result" id="sonucAlani">
 
 <p>
-1. Ham Adet Maliyeti
-<span class="highlight" id="resHamMaliyet">0,00 TL</span>
+Önceki Fiyat
+<span class="highlight" id="resEski">0,00 TL</span>
 </p>
 
 <p>
-2. İskontolu Net Adet Maliyeti
-<span class="highlight" id="resNetMaliyet">0,00 TL</span>
+Yeni Fiyat
+<span class="highlight" id="resYeni">0,00 TL</span>
 </p>
-
-<div class="total-box">
-
-<p>
-Eklenen Kâr Tutarı
-<span class="highlight" id="resKarTutar">0,00 TL</span>
-</p>
-
-<p style="font-weight:bold;">
-3. Kârlı Adet Fiyatı (KDV Hariç)
-<span class="highlight" id="resKarliFiyat">0,00 TL</span>
-</p>
-
-</div>
 
 <div class="final-box">
 
 <p>
-KDV Tutarı
-<span class="highlight" id="resKdvTutar">0,00 TL</span>
+İndirim Tutarı
+<span class="highlight" id="resTutar">0,00 TL</span>
 </p>
 
-<p style="font-size:16px;font-weight:bold;color:#27ae60;">
-4. Ürün Adet Satış Fiyatı (KDV Dahil)
-<span class="highlight" id="resAdetSatis">0,00 TL</span>
+<p style="font-size:17px;font-weight:bold;color:#27ae60;">
+Yapılan İndirim Oranı
+<span class="highlight" id="resIndirim">%0,00</span>
 </p>
 
 </div>
@@ -358,7 +212,7 @@ function temizleKutu(id){
 
 }
 
-function guvenliSayiyaCevir(id,tip){
+function sayiyaCevir(id){
 
     let value = document.getElementById(id).value.trim();
 
@@ -366,86 +220,59 @@ function guvenliSayiyaCevir(id,tip){
         return 0;
     }
 
-    if(tip === "tutar"){
-        value = value.replace(/\./g,"").replace(",",".");
-    }else{
-        value = value.replace(",",".");
-    }
+    value = value.replace(/\./g,"").replace(",",".");
 
     let sayi = parseFloat(value);
 
     return isNaN(sayi) ? 0 : sayi;
 }
 
-function hesaplaSatis(){
+function indirimHesapla(){
 
-    let brut = guvenliSayiyaCevir("brut","tutar");
+    let eskiFiyat = sayiyaCevir("eskiFiyat");
+    let yeniFiyat = sayiyaCevir("yeniFiyat");
 
-    let miktar1 = guvenliSayiyaCevir("miktar","sayi");
-    let miktar2 = guvenliSayiyaCevir("miktar2","sayi");
+    if(eskiFiyat <= 0){
 
-    let isk1 = guvenliSayiyaCevir("isk1","oran");
-    let isk2 = guvenliSayiyaCevir("isk2","oran");
-    let isk3 = guvenliSayiyaCevir("isk3","oran");
-    let isk4 = guvenliSayiyaCevir("isk4","oran");
-
-    let karOran = parseFloat(document.getElementById("kar").value) || 0;
-    let kdvOran = parseFloat(document.getElementById("kdv").value) || 0;
-
-    if(brut <= 0){
-
-        alert("Lütfen geçerli bir tutar giriniz.");
+        alert("Lütfen geçerli bir önceki fiyat giriniz.");
         return;
 
     }
 
-    if(miktar1 <= 0){
-        miktar1 = 1;
+    if(yeniFiyat < 0){
+
+        alert("Yeni fiyat geçersiz.");
+        return;
+
     }
 
-    if(miktar2 <= 0){
-        miktar2 = 1;
+    if(yeniFiyat > eskiFiyat){
+
+        alert("Yeni fiyat önceki fiyattan büyük olamaz.");
+        return;
+
     }
 
-    let hamAdetMaliyeti = (brut / miktar1) / miktar2;
+    let indirimTutari = eskiFiyat - yeniFiyat;
 
-    let netAdetMaliyeti = hamAdetMaliyeti;
-
-    netAdetMaliyeti *= (1 - isk1 / 100);
-    netAdetMaliyeti *= (1 - isk2 / 100);
-    netAdetMaliyeti *= (1 - isk3 / 100);
-    netAdetMaliyeti *= (1 - isk4 / 100);
-
-    let karTutar = netAdetMaliyeti * (karOran / 100);
-
-    let karliFiyat = netAdetMaliyeti + karTutar;
-
-    let kdvTutar = karliFiyat * (kdvOran / 100);
-
-    let satisFiyati = karliFiyat + kdvTutar;
+    let indirimOrani = (indirimTutari / eskiFiyat) * 100;
 
     let fmt = {
         minimumFractionDigits:2,
         maximumFractionDigits:2
     };
 
-    document.getElementById("resHamMaliyet").innerText =
-        hamAdetMaliyeti.toLocaleString("tr-TR",fmt) + " TL";
+    document.getElementById("resEski").innerText =
+        eskiFiyat.toLocaleString("tr-TR",fmt) + " TL";
 
-    document.getElementById("resNetMaliyet").innerText =
-        netAdetMaliyeti.toLocaleString("tr-TR",fmt) + " TL";
+    document.getElementById("resYeni").innerText =
+        yeniFiyat.toLocaleString("tr-TR",fmt) + " TL";
 
-    document.getElementById("resKarTutar").innerText =
-        karTutar.toLocaleString("tr-TR",fmt) + " TL";
+    document.getElementById("resTutar").innerText =
+        indirimTutari.toLocaleString("tr-TR",fmt) + " TL";
 
-    document.getElementById("resKarliFiyat").innerText =
-        karliFiyat.toLocaleString("tr-TR",fmt) + " TL";
-
-    document.getElementById("resKdvTutar").innerText =
-        kdvTutar.toLocaleString("tr-TR",fmt) + " TL";
-
-    document.getElementById("resAdetSatis").innerText =
-        satisFiyati.toLocaleString("tr-TR",fmt) + " TL";
+    document.getElementById("resIndirim").innerText =
+        "%" + indirimOrani.toLocaleString("tr-TR",fmt);
 
     document.getElementById("sonucAlani").style.display = "block";
 
@@ -458,7 +285,7 @@ document.querySelectorAll("input").forEach(function(input){
         if(e.key === "Enter"){
 
             e.preventDefault();
-            hesaplaSatis();
+            indirimHesapla();
 
         }
 
